@@ -3,13 +3,18 @@
 import React, { type FC } from "react";
 import Link from "next/link";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 import { useSiteConfig } from "../../config/SiteConfigProvider";
 import { useHasMounted } from "../../hooks/useHasMounted";
 import { isLoggedIn } from "../../auth/isLoggedIn";
 import { logout } from "../../auth/logout";
 
-const FooterContainer = styled("footer")({
+/**
+ * Farben kommen aus dem Theme, damit die Leiste auch im Light Mode trägt.
+ * Bei einem dunklen Theme mit `background.default: #171717` und weißem Text
+ * ergibt das exakt die vorherigen festen Werte.
+ */
+const FooterContainer = styled("footer")(({ theme }) => ({
     position: "fixed",
     zIndex: 100,
     bottom: 0,
@@ -20,9 +25,9 @@ const FooterContainer = styled("footer")({
     justifyContent: "space-between",
     boxSizing: "border-box",
     backdropFilter: "blur(10px)",
-    background: "rgba(23, 23, 23, 0.88)",
-    borderTop: "1px solid rgba(255, 255, 255, 0.15)",
-});
+    background: alpha(theme.palette.background.default, 0.88),
+    borderTop: `1px solid ${alpha(theme.palette.text.primary, 0.15)}`,
+}));
 
 export type FooterProps = {
     /** Zusätzliche Elemente, z.B. ein Copyright-Hinweis */
