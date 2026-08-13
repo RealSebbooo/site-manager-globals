@@ -42,7 +42,7 @@ export const Footer: FC<FooterProps> = ({ children }) => {
     const { auth, legal } = useSiteConfig();
     const hasMounted = useHasMounted();
 
-    // Erst nach dem Mount auswerten — localStorage gibt es beim SSR nicht.
+    // Erst nach dem Mount auswerten, localStorage gibt es beim SSR nicht.
     const loggedIn = hasMounted && isLoggedIn();
 
     const logoutRedirect = auth?.logoutRedirect ?? "/";

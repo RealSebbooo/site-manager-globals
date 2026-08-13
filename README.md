@@ -1,6 +1,6 @@
 # @site/globals
 
-Geteilte React-Bausteine für Websites von Vereinen und Kleinstfirmen — die
+Geteilte React-Bausteine für Websites von Vereinen und Kleinstfirmen, die
 gemeinsame Basis aller Projekte im [site-manager](https://github.com/RealSebbooo/site-manager)-Monorepo.
 
 Enthält ausschließlich generische Bausteine: Layout, Dialoge, Formularelemente,
@@ -14,7 +14,7 @@ Nichts davon ist an ein bestimmtes Projekt gebunden.
 npm install github:RealSebbooo/site-manager-globals#main
 ```
 
-Das Paket wird als **roher TypeScript-Source** ausgeliefert — es gibt keinen
+Das Paket wird als **roher TypeScript-Source** ausgeliefert, es gibt keinen
 Build-Step. Die konsumierende Next.js-App transpiliert es mit:
 
 ```js

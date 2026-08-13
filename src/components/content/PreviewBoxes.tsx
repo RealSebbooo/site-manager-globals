@@ -71,7 +71,7 @@ export type PreviewBoxesProps = {
 
 /**
  * Schematische Vorschau, wie Bild und Text im Beitrag angeordnet werden.
- * Rein visuell — keine echten Inhalte.
+ * Rein visuell, keine echten Inhalte.
  */
 export const PreviewBoxes: FC<PreviewBoxesProps> = ({
     size,

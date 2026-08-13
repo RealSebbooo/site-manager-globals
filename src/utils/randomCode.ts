@@ -1,4 +1,4 @@
-/** Ohne 0/O und 1/I — verwechslungsfrei beim Abtippen oder Vorlesen. */
+/** Ohne 0/O und 1/I, verwechslungsfrei beim Abtippen oder Vorlesen. */
 const UNAMBIGUOUS_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 /** Zufälliger Code aus verwechslungsfreien Zeichen, z.B. für Zugangscodes. */

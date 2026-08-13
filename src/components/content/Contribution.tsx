@@ -73,7 +73,7 @@ export type ContributionProps = {
 
 /**
  * Ein Beitrag (News, Bericht, Ankündigung) mit Bild, um das der Text fließt.
- * Das Bild wird auf die Textspalte eingepasst — Größe, Ausrichtung und
+ * Das Bild wird auf die Textspalte eingepasst. Größe, Ausrichtung und
  * Position stecken im Beitrag selbst.
  */
 export const Contribution: FC<ContributionProps> = ({
@@ -107,7 +107,7 @@ export const Contribution: FC<ContributionProps> = ({
         };
     }, [src]);
 
-    // Läuft bewusst nur bei neuen Bildmaßen — nicht bei jeder Größenänderung
+    // Läuft bewusst nur bei neuen Bildmaßen, nicht bei jeder Größenänderung
     // der Box, sonst schaukeln sich Float-Höhe und Texthöhe gegenseitig hoch.
     useEffect(() => {
         if (!natural.width || !natural.height) return;

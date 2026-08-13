@@ -48,7 +48,7 @@ export type HeaderProps = {
 
 /**
  * Kopfzeile mit Navigation, Social-Icons und mobilem Drawer.
- * Alle Inhalte kommen aus der `SiteConfig` — hier steht nichts Projektspezifisches.
+ * Alle Inhalte kommen aus der `SiteConfig`, hier steht nichts Projektspezifisches.
  */
 export const Header: FC<HeaderProps> = ({ linkColor = "#fff" }) => {
     const { name, logoUrl, navigation, social } = useSiteConfig();

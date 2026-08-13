@@ -68,7 +68,7 @@ export const useCollection = <T,>(
         } finally {
             setLoading(false);
         }
-        // `filters` ist ein Array-Literal und wäre bei jedem Render neu —
+        // `filters` ist ein Array-Literal und wäre bei jedem Render neu,
         // deshalb bewusst über den serialisierten Wert vergleichen.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [

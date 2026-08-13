@@ -2,6 +2,7 @@
 
 import React, { type FC } from "react";
 import Button from "@mui/material/Button";
+import { setConsent } from "./hasConsent";
 
 export type NoConsentButtonProps = {
     /** Name des Cookies, der gesetzt wird */
@@ -12,17 +13,14 @@ export type NoConsentButtonProps = {
 
 /**
  * Platzhalter für eine Funktion, die ohne Einwilligung nicht laufen darf.
- * Nach dem Klick wird die Seite neu geladen, damit das Feature erscheint.
+ * Nach dem Klick erscheint das Feature sofort, vorausgesetzt, es liest die
+ * Einwilligung mit `useConsent`.
  */
 export const NoConsentButton: FC<NoConsentButtonProps> = ({
     consentName,
     displayName,
 }) => {
-    const activateCookie = () => {
-        if (typeof document === "undefined") return;
-        document.cookie = `${consentName}=true; max-age=31536000; path=/`;
-        window.location.reload();
-    };
+    const activateCookie = () => setConsent(consentName);
 
     return (
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>

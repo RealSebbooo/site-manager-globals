@@ -26,7 +26,7 @@ export const getItemFromDatabase = async (
 };
 
 /**
- * Überschreibt das Dokument mit `item.uid` vollständig — Felder, die im
+ * Überschreibt das Dokument mit `item.uid` vollständig. Felder, die im
  * übergebenen Objekt fehlen, sind danach weg.
  */
 export const updateItemFromDatabase = async (

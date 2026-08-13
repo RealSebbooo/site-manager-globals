@@ -9,18 +9,18 @@ import CookieIcon from "@mui/icons-material/Cookie";
 import { useTheme } from "@mui/material/styles";
 import "../../theme/augmentation";
 import { useSiteConfig } from "../../config/SiteConfigProvider";
+import { setConsent } from "./hasConsent";
 
 export type CookieConsentProps = {
     /**
      * Cookies, die bei "Annehmen" gesetzt werden.
-     * Default: `["maps"]` — die typische Google-Maps-Einbindung.
+     * Default: `["maps"]`, die typische Google-Maps-Einbindung.
      */
     optionalCookies?: string[];
     text?: string;
 };
 
 const BANNER_COOKIE = "banner";
-const ONE_YEAR = 31536000;
 
 /** Einwilligungs-Banner unten rechts. Verschwindet nach der Entscheidung. */
 export const CookieConsent: FC<CookieConsentProps> = ({
@@ -40,17 +40,15 @@ export const CookieConsent: FC<CookieConsentProps> = ({
 
     if (decided) return null;
 
-    const setCookie = (name: string) => {
-        document.cookie = `${name}=true; max-age=${ONE_YEAR}; path=/`;
-    };
-
     const decline = () => {
-        setCookie(BANNER_COOKIE);
+        setConsent(BANNER_COOKIE);
         setDecided(true);
     };
 
     const accept = () => {
-        optionalCookies.forEach(setCookie);
+        // `setConsent` meldet jede Änderung, damit eingebettete Inhalte wie
+        // der Instagram-Feed sofort nachladen statt erst beim nächsten Aufruf.
+        optionalCookies.forEach(setConsent);
         decline();
     };
 

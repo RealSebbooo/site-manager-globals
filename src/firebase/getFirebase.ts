@@ -45,7 +45,7 @@ export const configureFirebase = (options: FirebaseOptions) => {
 };
 
 /**
- * Initialisiert Firebase beim ERSTEN Aufruf — nicht beim Import. Dadurch
+ * Initialisiert Firebase beim ERSTEN Aufruf, nicht beim Import. Dadurch
  * lassen sich Komponenten aus diesem Paket auch in Apps ohne Firebase-Env
  * importieren, solange sie die Firebase-Pfade nicht anfassen.
  */

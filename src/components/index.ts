@@ -51,7 +51,13 @@ export {
     NoConsentButton,
     type NoConsentButtonProps,
 } from "./consent/NoConsentButton";
-export { hasConsent } from "./consent/hasConsent";
+export {
+    hasConsent,
+    setConsent,
+    notifyConsentChanged,
+    subscribeConsent,
+} from "./consent/hasConsent";
+export { useConsent } from "./consent/useConsent";
 
 // Sonstiges
 export { HorizontalLine } from "./misc/HorizontalLine";

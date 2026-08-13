@@ -12,7 +12,7 @@ export type PageHeadProps = {
 };
 
 /**
- * `<title>` und Meta-Tags einer Seite — für den **Pages Router**.
+ * `<title>` und Meta-Tags einer Seite, für den **Pages Router**.
  * Im App Router stattdessen `buildMetadata()` in `generateMetadata` nutzen.
  */
 export const PageHead: FC<PageHeadProps> = ({

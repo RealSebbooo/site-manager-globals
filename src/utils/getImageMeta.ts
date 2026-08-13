@@ -5,7 +5,7 @@ export type ImageMeta = {
 
 /**
  * Lädt ein Bild nur, um seine Originalmaße zu erfahren.
- * Auf dem Server wird nichts geladen — das Promise löst mit `undefined` auf.
+ * Auf dem Server wird nichts geladen, das Promise löst mit `undefined` auf.
  */
 export const getImageMeta = (src: string): Promise<ImageMeta | undefined> =>
     new Promise((resolve) => {
