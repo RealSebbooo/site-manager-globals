@@ -41,6 +41,10 @@ export {
     EventCalendar,
     type EventCalendarProps,
 } from "./calendar/EventCalendar";
+export {
+    CalendarSubscribe,
+    type CalendarSubscribeProps,
+} from "./calendar/CalendarSubscribe";
 
 // Einwilligung
 export {

@@ -6,3 +6,5 @@ export {
     type PdfColumn,
     type ExportTablePdfOptions,
 } from "./exportTablePdf";
+export { buildIcs, type BuildIcsOptions } from "./buildIcs";
+export { downloadTextFile } from "./downloadTextFile";
