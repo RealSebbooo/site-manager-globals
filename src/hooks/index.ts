@@ -1,3 +1,4 @@
+export { useActivePath } from "./useActivePath";
 export { useHasMounted } from "./useHasMounted";
 export { useIsBreakpoint } from "./useIsBreakpoint";
 export {

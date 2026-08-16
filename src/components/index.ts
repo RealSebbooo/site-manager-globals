@@ -1,5 +1,17 @@
 // Layout
 export { Header, type HeaderProps } from "./layout/Header";
+export { HeaderDrawer, type HeaderDrawerProps } from "./layout/HeaderDrawer";
+export { HeaderNavItem, type HeaderNavItemProps } from "./layout/HeaderNavItem";
+export {
+    HeaderAuthArea,
+    type HeaderAuthAreaProps,
+} from "./layout/HeaderAuthArea";
+export { HeaderSocial, type HeaderSocialProps } from "./layout/HeaderSocial";
+export {
+    isActiveRoute,
+    isBranchActive,
+    visibleNavigation,
+} from "./layout/navigationUtils";
 export { Footer, type FooterProps } from "./layout/Footer";
 export { PageHead, type PageHeadProps } from "./layout/PageHead";
 export {

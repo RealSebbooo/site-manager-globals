@@ -15,7 +15,7 @@ export type SiteThemeTokens = {
     fontFamily?: string;
 };
 
-const DEFAULT_TOKENS = {
+const DARK_TOKENS = {
     mode: "dark",
     background: "#171717",
     surface: "#272727",
@@ -24,6 +24,22 @@ const DEFAULT_TOKENS = {
     secondary: "#19857b",
     accent: "#ffeb3b",
     error: "#ff0000",
+} as const;
+
+/**
+ * Eigene Vorgaben für den Light Mode. Ohne sie erbte eine helle Seite die
+ * dunklen Werte oben und bekam weiße Schrift auf hellem Grund, sobald sie
+ * auch nur einen Token vergaß.
+ */
+const LIGHT_TOKENS = {
+    mode: "light",
+    background: "#f7f8fa",
+    surface: "#ffffff",
+    text: "#111827",
+    primary: "#34527a",
+    secondary: "#0f766e",
+    accent: "#b45309",
+    error: "#b91c1c",
 } as const;
 
 /**
@@ -36,13 +52,17 @@ export const createSiteTheme = (
     tokens: SiteThemeTokens = {},
     options: ThemeOptions = {},
 ): Theme => {
-    const t = { ...DEFAULT_TOKENS, ...tokens };
+    const defaults = tokens.mode === "light" ? LIGHT_TOKENS : DARK_TOKENS;
+    const t = { ...defaults, ...tokens };
 
     return createTheme(
         {
             palette: {
                 mode: t.mode,
-                background: { default: t.background },
+                // `paper` gehört dazu: ohne den Wert bleiben alle Karten und
+                // Dialoge auf MUIs Standard (#fff bzw. #121212) stehen, egal
+                // welche Flächenfarbe die Seite gewählt hat.
+                background: { default: t.background, paper: t.surface },
                 surface: { main: t.surface },
                 text: { primary: t.text },
                 font: { main: t.text },

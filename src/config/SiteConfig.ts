@@ -3,6 +3,18 @@ import type { SiteThemeTokens } from "../theme/createSiteTheme";
 export type SiteNavigationItem = {
     name: string;
     route: string;
+
+    /**
+     * Untermenü. Bewusst nur eine Ebene tief: mehr passt weder in ein
+     * Dropdown noch auf ein Handy, und niemand findet den dritten Klick.
+     */
+    children?: SiteNavigationItem[];
+
+    /** Kurze Erklärzeile unter dem Namen, nur im Dropdown sichtbar. */
+    description?: string;
+
+    /** Eintrag nur zeigen, wenn jemand angemeldet ist. */
+    requiresAuth?: boolean;
 };
 
 export type SiteSocialLinks = {
