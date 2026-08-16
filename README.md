@@ -33,15 +33,13 @@ Damit TypeScript die `exports`-Map versteht, braucht die App
 Läuft mit Next.js 14 (Pages Router) und 15 (App Router), React 18, MUI v5.
 Alle Laufzeit-Abhängigkeiten sind `peerDependencies` und kommen aus der App.
 
-## Bei jeder Änderung die Version erhöhen
+## Jede Änderung bekommt eine neue Version
 
-Wer hier etwas unter `src/` ändert, zählt in der `package.json` die Version
-hoch. Das ist keine Formsache, sondern die einzige Stelle, an der die Projekte
-eine neue Fassung überhaupt bemerken:
-
-```bash
-npm version patch --no-git-tag-version
-```
+Das passiert von selbst: `.githooks/pre-commit` zählt die Patch-Version hoch,
+sobald ein Commit etwas unter `src/` anfasst, und legt die `package.json` mit
+in denselben Commit. Wer die Version schon von Hand gesetzt hat, etwa auf eine
+neue Minor-Version, wird nicht überstimmt; Änderungen außerhalb von `src/`
+lösen nichts aus.
 
 Der Grund steckt darin, wie npm installiert. Das Paket hängt in den Projekten
 als Zweig, `…#main`, die Fassung steht also nur in deren `package-lock.json`.
@@ -55,13 +53,18 @@ Projektcode und alten globals gebaut, und es sieht aus, als sei die Änderung
 nie angekommen. Eine höhere Version ist das eine Feld, an dem npm den
 Unterschied bemerkt und den Ordner wegwirft.
 
-Damit das nicht am Gedächtnis hängt, liegt in `.githooks/pre-push` ein Hook,
-der den Push verweigert, wenn sich `src/` geändert hat und die Version nicht.
-Einmal je Arbeitskopie einschalten:
+Hinter dem `pre-commit` steht ein `pre-push`, der den Push verweigert, falls
+doch einmal eine Quelländerung ohne neue Version durchrutscht, etwa aus einem
+Commit mit `--no-verify`. Beide Hooks hängen an `core.hooksPath`, das jede
+Arbeitskopie einmal setzen muss:
 
 ```bash
 git config core.hooksPath .githooks
 ```
+
+Danach zieht `npm run update:globals` im Monorepo die vier Lockdateien nach und
+zeigt, wer auf welcher Fassung steht. Für die gebauten Seiten zählt allein die
+Lockdatei, die geänderten Dateien gehören also committet.
 
 ## Einstiegspunkte
 

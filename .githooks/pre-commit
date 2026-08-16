@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# Zählt die Version in der `package.json` selbsttätig hoch, sobald ein Commit
+# etwas unter `src/` anfasst.
+#
+# Warum das sein muss, steht ausführlich in der README unter „Bei jeder
+# Änderung die Version erhöhen". Kurz: die Projekte hängen an `#main`, und npm
+# ersetzt eine vorhandene Kopie nur, wenn Version oder Commit in den Metadaten
+# abweichen. Bleibt die Version stehen, überlebt eine alte Kopie im
+# `node_modules` beliebig viele Builds, und die Änderung kommt auf den
+# gebauten Seiten nie an.
+#
+# Der Sprung passiert hier und nicht beim Pushen, weil zum Commit-Zeitpunkt
+# noch feststeht, was in den Commit gehört. `git commit --amend` erhöht
+# entsprechend erneut; das ist gewollt, Versionen dürfen Lücken haben.
+#
+# Einschalten, einmal je Arbeitskopie:
+#
+#     git config core.hooksPath .githooks
+#
+# Überspringen, wenn eine Änderung wirklich keine neue Fassung ist:
+#
+#     git commit --no-verify
+
+set -e
+
+# Nur Änderungen an der ausgelieferten Quelle zählen. README, Hooks und
+# tsconfig ändern nichts an dem, was die Projekte einbinden.
+QUELLE=$(git diff --cached --name-only --diff-filter=ACMRD -- src | wc -l)
+[ "$QUELLE" -eq 0 ] && exit 0
+
+# Wer von Hand erhöht hat, etwa auf eine Minor-Version, wird nicht überstimmt.
+if git diff --cached -- package.json | grep -q '^[+-].*"version"'; then
+    exit 0
+fi
+
+ALT=$(sed -n 's/.*"version": "\([^"]*\)".*/\1/p' package.json | head -1)
+
+if ! echo "$ALT" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    echo "Commit gestoppt: Version \"$ALT\" ist nicht x.y.z, das erhöht sich" >&2
+    echo "nicht von selbst. Bitte von Hand setzen." >&2
+    exit 1
+fi
+
+NEU=$(echo "$ALT" | awk -F. '{printf "%s.%s.%d", $1, $2, $3 + 1}')
+
+# Über eine Zwischendatei statt mit `sed -i`: die Option kennt jedes System
+# anders, und `0,/…/` gibt es nur im GNU-sed. Das BSD-sed auf einem Mac nimmt
+# den Ausdruck an, ändert aber nichts und meldet trotzdem Erfolg.
+# `"version": "x.y.z"` steht in einer package.json genau einmal, Abhängigkeiten
+# stehen unter ihrem eigenen Namen.
+sed "s/\"version\": \"$ALT\"/\"version\": \"$NEU\"/" package.json > package.json.neu
+mv package.json.neu package.json
+
+# Gegenprüfen statt hoffen. Ein stiller Fehlschlag an dieser Stelle wäre genau
+# der Fehler, den dieser Hook verhindern soll.
+if ! grep -q "\"version\": \"$NEU\"" package.json; then
+    echo "Commit gestoppt: die Version ließ sich nicht auf $NEU setzen." >&2
+    exit 1
+fi
+
+git add package.json
+
+echo "@site/globals: Version $ALT -> $NEU (automatisch, siehe .githooks/pre-commit)"
+
+exit 0
