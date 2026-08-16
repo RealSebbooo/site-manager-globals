@@ -43,7 +43,10 @@ export const SiteGlobalStyles = () => {
                 ".MuiTabs-flexContainer": {
                     overflow: "auto",
                 },
-                textarea: {
+                // Nur nackte Textfelder. Ein `<textarea>` innerhalb eines
+                // MUI-Feldes bringt Rahmen, Polster und Abstand schon mit;
+                // ohne diese Ausnahme säße ein zweiter Rahmen im ersten.
+                "textarea:not(.MuiInputBase-input)": {
                     boxSizing: "border-box",
                     width: "100%",
                     fontSize: "1rem",
