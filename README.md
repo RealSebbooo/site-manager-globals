@@ -11,8 +11,11 @@ Nichts davon ist an ein bestimmtes Projekt gebunden.
 ## Installation
 
 ```bash
-npm install github:RealSebbooo/site-manager-globals#main
+npm install git+https://github.com/RealSebbooo/site-manager-globals.git#main
 ```
+
+Immer diese Langform, nie die Kurzform `github:…`: mit ihr bricht der
+Vercel-Build.
 
 Das Paket wird als **roher TypeScript-Source** ausgeliefert, es gibt keinen
 Build-Step. Die konsumierende Next.js-App transpiliert es mit:
@@ -29,6 +32,36 @@ Damit TypeScript die `exports`-Map versteht, braucht die App
 
 Läuft mit Next.js 14 (Pages Router) und 15 (App Router), React 18, MUI v5.
 Alle Laufzeit-Abhängigkeiten sind `peerDependencies` und kommen aus der App.
+
+## Bei jeder Änderung die Version erhöhen
+
+Wer hier etwas unter `src/` ändert, zählt in der `package.json` die Version
+hoch. Das ist keine Formsache, sondern die einzige Stelle, an der die Projekte
+eine neue Fassung überhaupt bemerken:
+
+```bash
+npm version patch --no-git-tag-version
+```
+
+Der Grund steckt darin, wie npm installiert. Das Paket hängt in den Projekten
+als Zweig, `…#main`, die Fassung steht also nur in deren `package-lock.json`.
+Beim Installieren vergleicht npm die Angaben aus
+`node_modules/.package-lock.json` mit denen der Lockdatei und sieht sich den
+Ordnerinhalt nie an. Stehen dort dieselbe Version und derselbe Commit, wird das
+Paket übersprungen, auch wenn im Ordner eine ältere Fassung liegt. Auf einem
+Rechner mit warmem `node_modules`, etwa im Build-Cache von Vercel, überlebt so
+eine alte Kopie beliebig viele Deploys: die Seite wird dann aus neuem
+Projektcode und alten globals gebaut, und es sieht aus, als sei die Änderung
+nie angekommen. Eine höhere Version ist das eine Feld, an dem npm den
+Unterschied bemerkt und den Ordner wegwirft.
+
+Damit das nicht am Gedächtnis hängt, liegt in `.githooks/pre-push` ein Hook,
+der den Push verweigert, wenn sich `src/` geändert hat und die Version nicht.
+Einmal je Arbeitskopie einschalten:
+
+```bash
+git config core.hooksPath .githooks
+```
 
 ## Einstiegspunkte
 

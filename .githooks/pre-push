@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# Verweigert den Push, wenn sich unter `src/` etwas geändert hat, die Version
+# in der `package.json` aber gleich geblieben ist.
+#
+# Warum das nötig ist: dieses Paket hängt in den Projekten als
+# `…site-manager-globals.git#main`, die Fassung steht also nur in deren
+# package-lock.json. Beim Installieren vergleicht npm die Angaben aus
+# `node_modules/.package-lock.json` mit denen der Lockdatei und sieht sich den
+# Ordnerinhalt nicht an. Stehen dort dieselbe Version und derselbe Commit,
+# überspringt npm das Paket, auch wenn im Ordner eine ältere Fassung liegt.
+# Einmal in diesem Zustand bleibt er bei jedem weiteren Build erhalten. Eine
+# höhere Version ist das eine Feld, an dem npm den Unterschied bemerkt.
+#
+# Einschalten, einmal je Arbeitskopie:
+#
+#     git config core.hooksPath .githooks
+#
+# Umgehen, wenn eine Änderung wirklich keine neue Fassung ist:
+#
+#     git push --no-verify
+
+set -e
+
+VERGLEICH="origin/main"
+
+# Beim allerersten Push gibt es nichts zu vergleichen.
+if ! git rev-parse --verify --quiet "$VERGLEICH" >/dev/null; then
+    exit 0
+fi
+
+QUELLE_GEAENDERT=$(git diff --name-only "$VERGLEICH"...HEAD -- src | wc -l)
+VERSION_GEAENDERT=$(git diff "$VERGLEICH"...HEAD -- package.json | grep -c '^[+-].*"version"' || true)
+
+if [ "$QUELLE_GEAENDERT" -gt 0 ] && [ "$VERSION_GEAENDERT" -eq 0 ]; then
+    echo "Push gestoppt: unter src/ hat sich etwas geändert, die Version in" >&2
+    echo "package.json aber nicht. Ohne höhere Version lassen die Projekte" >&2
+    echo "beim nächsten Build ihre alte Kopie von @site/globals stehen." >&2
+    echo "" >&2
+    echo "  npm version patch --no-git-tag-version && git commit -am \"chore: Version erhöhen\"" >&2
+    echo "" >&2
+    echo "Wirklich ohne neue Fassung pushen: git push --no-verify" >&2
+    exit 1
+fi
+
+exit 0
