@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type FC, useEffect, useState } from "react";
+import React, { type FC, type ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -31,6 +31,14 @@ export type HeaderDrawerProps = {
     navigation: SiteNavigationItem[];
     activePath: string;
     loggedIn: boolean;
+    /** Ersetzt Logo und Name im Kopf des Drawers. */
+    brand?: ReactNode;
+    /**
+     * Ersetzt den Anmelde-Bereich unten. Nötig, sobald ein Projekt eine
+     * eigene Anmeldung hat: `HeaderAuthArea` hängt an `isLoggedIn()` aus
+     * `globals`, das nur den `localStorage` liest.
+     */
+    authArea?: ReactNode;
 };
 
 /**
@@ -46,6 +54,8 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
     navigation,
     activePath,
     loggedIn,
+    brand,
+    authArea,
 }) => {
     const theme = useTheme();
     const { name, logoUrl } = useSiteConfig();
@@ -102,18 +112,19 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
                 justifyContent="space-between"
                 sx={{ p: 2, gap: 1 }}
             >
-                {logoUrl ? (
-                    <Box
-                        component="img"
-                        src={logoUrl}
-                        alt={name}
-                        sx={{ height: 32, width: "auto" }}
-                    />
-                ) : (
-                    <Typography variant="subtitle1" noWrap>
-                        {name}
-                    </Typography>
-                )}
+                {brand ??
+                    (logoUrl ? (
+                        <Box
+                            component="img"
+                            src={logoUrl}
+                            alt={name}
+                            sx={{ height: 32, width: "auto" }}
+                        />
+                    ) : (
+                        <Typography variant="subtitle1" noWrap>
+                            {name}
+                        </Typography>
+                    ))}
                 <IconButton
                     onClick={onClose}
                     aria-label="Navigation schließen"
@@ -228,11 +239,13 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
             <Divider sx={{ mx: 2 }} />
 
             <Stack spacing={1} sx={{ p: 2 }}>
-                <HeaderAuthArea
-                    loggedIn={loggedIn}
-                    fullWidth
-                    onNavigate={onClose}
-                />
+                {authArea ?? (
+                    <HeaderAuthArea
+                        loggedIn={loggedIn}
+                        fullWidth
+                        onNavigate={onClose}
+                    />
+                )}
                 <HeaderSocial />
             </Stack>
         </Drawer>

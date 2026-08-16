@@ -32,16 +32,28 @@ export type HeaderProps = {
     position?: "static" | "sticky";
     /** Container-Breite, damit Kopf und Seiteninhalt bündig stehen. */
     maxWidth?: Breakpoint | false;
+    /**
+     * Die Marke links. Ohne Angabe Logo und Name aus der `SiteConfig`,
+     * `false` blendet sie ganz aus, eigene Elemente ersetzen sie.
+     */
+    brand?: React.ReactNode | false;
+    /** Wo die Navigation sitzt. Ohne Marke ist `left` das Naheliegende. */
+    align?: "left" | "center";
     /** @deprecated Die Farbe kommt aus dem Theme. */
     linkColor?: string;
 };
 
 /**
- * Kopfzeile mit Navigation, Untermenüs, Anmeldung und Social-Icons.
+ * Die Standard-Kopfzeile: Marke links, Navigation mittig, rechts Anmeldung
+ * und Social. Einträge mit `children` öffnen ein Dropdown, ab `md` auch beim
+ * Überfahren. Unterhalb von `md` liegt alles im Drawer.
  *
- * Einzeilig: Logo links, Navigation mittig, rechts Anmeldung und Social.
- * Einträge mit `children` öffnen ein Dropdown, ab `md` auch beim Überfahren.
- * Unterhalb von `md` liegt alles im Drawer.
+ * Sie ist ein **Angebot, keine Vorschrift**. Damit nicht jede Seite gleich
+ * aussieht, sind ihre Teile einzeln exportiert: `HeaderNavItem`,
+ * `HeaderDrawer`, `HeaderAuthArea`, `HeaderSocial` und die Regeln in
+ * `navigationUtils`. Wer eine eigene Kopfzeile will, baut sie daraus und
+ * erbt trotzdem Untermenüs, Tastaturbedienung und aktive Route. Beispiel:
+ * `projects/sv-musterhausen/src/components/layout/SiteHeader.tsx`.
  *
  * Alle Inhalte kommen aus der `SiteConfig`, hier steht nichts
  * Projektspezifisches.
@@ -51,6 +63,8 @@ export const Header: FC<HeaderProps> = ({
     actions,
     position = "static",
     maxWidth = "lg",
+    brand,
+    align,
     linkColor,
 }) => {
     const { name, logoUrl, navigation } = useSiteConfig();
@@ -77,40 +91,45 @@ export const Header: FC<HeaderProps> = ({
                             ...(linkColor ? { color: linkColor } : {}),
                         }}
                     >
-                        <Stack
-                            direction="row"
-                            spacing={1.25}
-                            alignItems="center"
-                            component={Link}
-                            href="/"
-                            aria-label={`${name}, zur Startseite`}
-                            sx={{
-                                textDecoration: "none",
-                                color: "inherit",
-                                minWidth: 0,
-                            }}
-                        >
-                            {logoUrl && (
-                                <Box
-                                    component="img"
-                                    src={logoUrl}
-                                    alt=""
-                                    sx={{
-                                        height: { xs: 30, md: 38 },
-                                        width: "auto",
-                                        flexShrink: 0,
-                                    }}
-                                />
-                            )}
-                            <Typography
-                                variant="h6"
-                                component="span"
-                                noWrap
-                                sx={{ fontWeight: 700, letterSpacing: "-0.01em" }}
+                        {brand === false ? null : (brand ?? (
+                            <Stack
+                                direction="row"
+                                spacing={1.25}
+                                alignItems="center"
+                                component={Link}
+                                href="/"
+                                aria-label={`${name}, zur Startseite`}
+                                sx={{
+                                    textDecoration: "none",
+                                    color: "inherit",
+                                    minWidth: 0,
+                                }}
                             >
-                                {name}
-                            </Typography>
-                        </Stack>
+                                {logoUrl && (
+                                    <Box
+                                        component="img"
+                                        src={logoUrl}
+                                        alt=""
+                                        sx={{
+                                            height: { xs: 30, md: 38 },
+                                            width: "auto",
+                                            flexShrink: 0,
+                                        }}
+                                    />
+                                )}
+                                <Typography
+                                    variant="h6"
+                                    component="span"
+                                    noWrap
+                                    sx={{
+                                        fontWeight: 700,
+                                        letterSpacing: "-0.01em",
+                                    }}
+                                >
+                                    {name}
+                                </Typography>
+                            </Stack>
+                        ))}
 
                         <Box
                             component="nav"
@@ -118,7 +137,11 @@ export const Header: FC<HeaderProps> = ({
                             sx={{
                                 display: { xs: "none", md: "flex" },
                                 flex: 1,
-                                justifyContent: "center",
+                                justifyContent:
+                                    (align ?? (brand === false ? "left" : "center")) ===
+                                    "left"
+                                        ? "flex-start"
+                                        : "center",
                                 alignItems: "center",
                                 gap: 0.25,
                             }}
