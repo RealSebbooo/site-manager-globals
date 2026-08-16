@@ -16,6 +16,12 @@ export type EventCalendarProps = {
     events: Array<CalendarEvent>;
     /** Text, wenn ein Tag ausgewählt ist, aber keine Termine hat */
     emptyDayLabel?: string;
+    /**
+     * Größte Breite des Kalenders. Ohne Angabe 620px, siehe Kommentar am
+     * `Paper`. `false` schaltet die Deckelung ab, dann füllt der Kalender
+     * seinen Container wie zuvor.
+     */
+    maxWidth?: number | string | false;
 };
 
 const WEEKDAY_LABELS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
@@ -71,6 +77,7 @@ const getMondayBasedWeekday = (date: Date) => (date.getDay() + 6) % 7;
 export const EventCalendar: FC<EventCalendarProps> = ({
     events,
     emptyDayLabel = "Keine Termine an diesem Tag.",
+    maxWidth = 620,
 }) => {
     const theme = useTheme();
 
@@ -150,6 +157,16 @@ export const EventCalendar: FC<EventCalendarProps> = ({
                 borderRadius: 3,
                 border: `1px solid ${alpha(theme.palette.text.primary, 0.14)}`,
                 backgroundColor: alpha(theme.palette.surface.main, 0.86),
+                // Gedeckelte Breite, mittig gesetzt.
+                //
+                // Die Tageszellen sind quadratisch, ihre Höhe folgt also der
+                // Spaltenbreite. Ungedeckelt sind das in einem lg-Container
+                // rund 150px pro Tag und damit ein Kalender von fast 1000px
+                // Höhe. So bleiben es etwa 560px, ohne dass die Zellen ihre
+                // Form verlieren. Auf schmalen Fenstern greift die Deckelung
+                // nie, dort ist `maxWidth` größer als der Platz.
+                maxWidth: maxWidth === false ? "none" : maxWidth,
+                mx: "auto",
             }}
         >
             <Stack
