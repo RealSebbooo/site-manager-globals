@@ -1,5 +1,6 @@
 import { createTheme, type Theme, type ThemeOptions } from "@mui/material/styles";
 import "./augmentation";
+import { brandThemeTokens } from "./brandTokens";
 
 export type SiteThemeTokens = {
     mode?: "light" | "dark";
@@ -29,18 +30,10 @@ const DARK_TOKENS = {
 /**
  * Eigene Vorgaben für den Light Mode. Ohne sie erbte eine helle Seite die
  * dunklen Werte oben und bekam weiße Schrift auf hellem Grund, sobald sie
- * auch nur einen Token vergaß.
+ * auch nur einen Token vergaß. Die Werte sind die Marken-Palette der eigenen
+ * Seiten, siehe `brandTokens.ts`.
  */
-const LIGHT_TOKENS = {
-    mode: "light",
-    background: "#f7f8fa",
-    surface: "#ffffff",
-    text: "#111827",
-    primary: "#34527a",
-    secondary: "#0f766e",
-    accent: "#b45309",
-    error: "#b91c1c",
-} as const;
+const LIGHT_TOKENS = brandThemeTokens;
 
 /**
  * Baut das MUI-Theme einer Seite aus ein paar Farb-Tokens.
