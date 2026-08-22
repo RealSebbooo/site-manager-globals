@@ -4,7 +4,7 @@ import {
     type ThemeOptions,
 } from "@mui/material/styles";
 import "./augmentation";
-import { BRAND_BLUE, brandThemeTokens } from "./brandTokens";
+import { brandThemeDarkTokens, brandThemeTokens } from "./brandTokens";
 
 export type SiteThemeTokens = {
     mode?: "light" | "dark";
@@ -20,24 +20,8 @@ export type SiteThemeTokens = {
     fontFamily?: string;
 };
 
-const DARK_TOKENS = {
-    mode: "dark",
-    background: "#F9F9Ff",
-    // Karten und Dialoge heben sich als reines Weiß vom Seitenhintergrund ab.
-    surface: "#ffffff",
-    text: "#141414",
-    primary: BRAND_BLUE,
-    secondary: "#0f766e",
-    accent: "#b45309",
-    error: "#b91c1c",
-} as const;
+const DARK_TOKENS = brandThemeDarkTokens;
 
-/**
- * Eigene Vorgaben für den Light Mode. Ohne sie erbte eine helle Seite die
- * dunklen Werte oben und bekam weiße Schrift auf hellem Grund, sobald sie
- * auch nur einen Token vergaß. Die Werte sind die Marken-Palette der eigenen
- * Seiten, siehe `brandTokens.ts`.
- */
 const LIGHT_TOKENS = brandThemeTokens;
 
 /**
@@ -50,7 +34,7 @@ export const createSiteTheme = (
     tokens: SiteThemeTokens = {},
     options: ThemeOptions = {},
 ): Theme => {
-    const defaults = tokens.mode === "light" ? LIGHT_TOKENS : DARK_TOKENS;
+    const defaults = tokens.mode === "dark" ? DARK_TOKENS : LIGHT_TOKENS;
     const t = { ...defaults, ...tokens };
 
     return createTheme(

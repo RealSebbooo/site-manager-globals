@@ -26,13 +26,34 @@ export const BRAND_BLUE = "#34527a";
 export const brandThemeTokens = {
     mode: "light",
     background: "#F9F9Ff",
-    // Karten und Dialoge heben sich als reines Weiß vom Seitenhintergrund ab.
     surface: "#ffffff",
     text: "#141414",
     primary: BRAND_BLUE,
     secondary: "#0f766e",
     accent: "#b45309",
     error: "#b91c1c",
+} as const satisfies SiteThemeTokens;
+
+/**
+ * Die Dark-Variante derselben Marken-Palette. Die eigenen Seiten laufen zwar
+ * immer im Light Mode (siehe `mode: "light"` oben), aber `createSiteTheme`
+ * braucht einen Dark-Default, der greift, sobald eine Seite `mode: "dark"`
+ * setzt oder einen Token vergisst. Ohne diese Werte fiel der Dark-Zweig auf
+ * MUIs Signalfarben zurück (gelbes Primary auf Schwarz), was fälschlich wie
+ * das kolbädrescher-Theme aussah.
+ *
+ * Farben aus der Light-Palette, für dunklen Grund aufgehellt: das Blau und
+ * das Türkis brauchen mehr Helligkeit, um auf `background` lesbar zu bleiben.
+ */
+export const brandThemeDarkTokens = {
+    mode: "dark",
+    background: "#0e1420",
+    surface: "#18202e",
+    text: "#e9ecf3",
+    primary: "#8fa9d0",
+    secondary: "#2dd4bf",
+    accent: "#e0a94f",
+    error: "#f87171",
 } as const satisfies SiteThemeTokens;
 
 /**
