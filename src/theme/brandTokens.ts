@@ -16,7 +16,7 @@ import type { SiteThemeTokens } from "./createSiteTheme";
  * denselben Wert. Ein dunkles, entsättigtes Blau, ruhiger als ein
  * Signalblau und mit knapp 8:1 Kontrast gegen Weiß gut lesbar.
  */
-export const BRAND_BLUE = "#1f0062";
+export const BRAND_BLUE = "#34527a";
 
 /**
  * Farb-Tokens der eigenen Seiten. `as const` hält die Werte als konkrete
@@ -25,7 +25,7 @@ export const BRAND_BLUE = "#1f0062";
  */
 export const brandThemeTokens = {
     mode: "light",
-    background: "#F0F0F0",
+    background: "#F9F9Ff",
     // Karten und Dialoge heben sich als reines Weiß vom Seitenhintergrund ab.
     surface: "#ffffff",
     text: "#141414",
