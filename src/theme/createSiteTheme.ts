@@ -1,6 +1,10 @@
-import { createTheme, type Theme, type ThemeOptions } from "@mui/material/styles";
+import {
+    createTheme,
+    type Theme,
+    type ThemeOptions,
+} from "@mui/material/styles";
 import "./augmentation";
-import { brandThemeTokens } from "./brandTokens";
+import { BRAND_BLUE, brandThemeTokens } from "./brandTokens";
 
 export type SiteThemeTokens = {
     mode?: "light" | "dark";
@@ -18,13 +22,14 @@ export type SiteThemeTokens = {
 
 const DARK_TOKENS = {
     mode: "dark",
-    background: "#171717",
-    surface: "#272727",
-    text: "#ffffff",
-    primary: "#ffff00",
-    secondary: "#19857b",
-    accent: "#ffeb3b",
-    error: "#ff0000",
+    background: "#F9F9Ff",
+    // Karten und Dialoge heben sich als reines Weiß vom Seitenhintergrund ab.
+    surface: "#ffffff",
+    text: "#141414",
+    primary: BRAND_BLUE,
+    secondary: "#0f766e",
+    accent: "#b45309",
+    error: "#b91c1c",
 } as const;
 
 /**
@@ -64,7 +69,9 @@ export const createSiteTheme = (
                 secondary: { main: t.secondary },
                 error: { main: t.error },
             },
-            ...(t.fontFamily ? { typography: { fontFamily: t.fontFamily } } : {}),
+            ...(t.fontFamily
+                ? { typography: { fontFamily: t.fontFamily } }
+                : {}),
         },
         options,
     );
