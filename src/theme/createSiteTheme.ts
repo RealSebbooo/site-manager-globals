@@ -34,6 +34,10 @@ export const createSiteTheme = (
     tokens: SiteThemeTokens = {},
     options: ThemeOptions = {},
 ): Theme => {
+    // Light ist der sichere Default: nur ein ausdrückliches `mode: "dark"`
+    // zieht die dunklen Tokens. Vergisst eine Seite den `mode`, bleibt sie
+    // hell statt dunkel. marketing, admin und portal setzen `mode: "light"`
+    // und sind damit immer hell.
     const defaults = tokens.mode === "dark" ? DARK_TOKENS : LIGHT_TOKENS;
     const t = { ...defaults, ...tokens };
 
