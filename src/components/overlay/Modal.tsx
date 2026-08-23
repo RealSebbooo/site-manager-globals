@@ -74,7 +74,7 @@ export const MyModal: FC<MyModalProps> = ({
                     sx: {
                         borderTopLeftRadius: 16,
                         borderTopRightRadius: 16,
-                        maxHeight: "90vh",
+                        maxHeight: "80vh",
                         bgcolor: theme.palette.surface.main,
                         display: "flex",
                         flexDirection: "column",
