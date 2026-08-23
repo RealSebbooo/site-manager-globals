@@ -4,9 +4,11 @@ import React, { type FC, type ReactNode } from "react";
 import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import { useTheme } from "@mui/material/styles";
+import { alpha, useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import "../../theme/augmentation";
 
 export type MyModalProps = {
@@ -18,7 +20,14 @@ export type MyModalProps = {
     disableScroll?: boolean;
 };
 
-/** Zentriertes Dialogfenster mit Titelzeile und Schließen-Icon. */
+/**
+ * Dialog mit Titelzeile und Schließen-Icon.
+ *
+ * Auf dem Desktop ein zentriertes Fenster, auf dem Handy ein Bottom Sheet: es
+ * fährt von unten herein, füllt die Breite und lässt sich am Griff oben nach
+ * unten wegziehen. Das Schließen-Icon bleibt in beiden Fassungen, der Griff
+ * kommt auf dem Handy als zweiter, vertrauter Weg dazu.
+ */
 export const MyModal: FC<MyModalProps> = ({
     open,
     title,
@@ -27,6 +36,79 @@ export const MyModal: FC<MyModalProps> = ({
     disableScroll = false,
 }) => {
     const theme = useTheme();
+    const mobil = useMediaQuery(theme.breakpoints.down("sm"));
+
+    const kopf = (
+        <Box
+            sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottom: "1px solid gray",
+                pb: 1,
+            }}
+        >
+            <Typography variant="h5">{title}</Typography>
+            <CloseIcon
+                aria-label="Schließen"
+                style={{ cursor: "pointer" }}
+                onClick={onClose}
+            />
+        </Box>
+    );
+
+    // Bottom Sheet: von unten, am Griff nach unten wegziehbar. Der Titel und
+    // der Griff bleiben stehen, nur der Inhalt darunter scrollt.
+    if (mobil) {
+        return (
+            <SwipeableDrawer
+                anchor="bottom"
+                open={open}
+                onClose={onClose}
+                onOpen={() => {}}
+                disableSwipeToOpen
+                // Geschlossen nichts im DOM lassen, wie beim zentrierten
+                // Modal: sonst hinge an jeder Position ein unsichtbares Sheet.
+                ModalProps={{ keepMounted: false }}
+                PaperProps={{
+                    sx: {
+                        borderTopLeftRadius: 16,
+                        borderTopRightRadius: 16,
+                        maxHeight: "90vh",
+                        bgcolor: theme.palette.surface.main,
+                        display: "flex",
+                        flexDirection: "column",
+                    },
+                }}
+            >
+                {/* Der Griff: die vertraute kurze Leiste, an der man das Sheet
+                    nach unten zieht. */}
+                <Box
+                    aria-hidden
+                    sx={{
+                        flexShrink: 0,
+                        width: 40,
+                        height: 5,
+                        borderRadius: 3,
+                        mx: "auto",
+                        mt: 1.5,
+                        mb: 1,
+                        bgcolor: alpha(theme.palette.text.primary, 0.2),
+                    }}
+                />
+                <Box sx={{ flexShrink: 0, px: 3 }}>{kopf}</Box>
+                <Box
+                    sx={{
+                        px: 3,
+                        pb: 3,
+                        overflowY: disableScroll ? "visible" : "auto",
+                    }}
+                >
+                    {children}
+                </Box>
+            </SwipeableDrawer>
+        );
+    }
 
     return (
         <Modal open={open} onClose={onClose}>
@@ -48,20 +130,7 @@ export const MyModal: FC<MyModalProps> = ({
                         outline: "none",
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            borderBottom: "1px solid gray",
-                            pb: 1,
-                        }}
-                    >
-                        <Typography variant="h5">{title}</Typography>
-                        <CloseIcon
-                            style={{ cursor: "pointer" }}
-                            onClick={onClose}
-                        />
-                    </Box>
+                    {kopf}
                     {children}
                 </Box>
             </Fade>
