@@ -83,13 +83,22 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
         );
 
     const itemSx = (active: boolean) => ({
-        borderRadius: 1,
-        borderLeft: `2px solid ${
-            active ? theme.palette.primary.main : "transparent"
-        }`,
+        borderRadius: 2,
+        minHeight: 44,
+        mb: 0.5,
+        color: active ? theme.palette.primary.main : "inherit",
         backgroundColor: active
-            ? alpha(theme.palette.primary.main, 0.08)
+            ? alpha(theme.palette.primary.main, 0.12)
             : "transparent",
+        transition: theme.transitions.create(
+            ["background-color", "color"],
+            { duration: theme.transitions.duration.shorter },
+        ),
+        "&:hover": {
+            backgroundColor: active
+                ? alpha(theme.palette.primary.main, 0.18)
+                : theme.palette.action.hover,
+        },
     });
 
     return (
@@ -134,9 +143,7 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
                 </IconButton>
             </Stack>
 
-            <Divider />
-
-            <List component="nav" sx={{ p: 1.5, flex: 1 }}>
+            <List component="nav" sx={{ px: 1.5, py: 1, flex: 1 }}>
                 {navigation.map((item) => {
                     const children = item.children ?? [];
                     const active = isBranchActive(activePath, item);
@@ -182,6 +189,7 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
                                     <ListItemText
                                         primary={item.name}
                                         primaryTypographyProps={{
+                                            color: "inherit",
                                             fontWeight: active ? 600 : 500,
                                         }}
                                     />
@@ -216,6 +224,7 @@ export const HeaderDrawer: FC<HeaderDrawerProps> = ({
                                                         <ListItemText
                                                             primary={child.name}
                                                             primaryTypographyProps={{
+                                                                color: "inherit",
                                                                 variant:
                                                                     "body2",
                                                                 fontWeight:
