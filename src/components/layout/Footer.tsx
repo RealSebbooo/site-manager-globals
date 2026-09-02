@@ -86,6 +86,16 @@ export const Footer: FC<FooterProps> = ({ children }) => {
                         Datenschutz
                     </Button>
                 )}
+                {legal?.agb && (
+                    <Button
+                        color="inherit"
+                        component={Link}
+                        href={legal.agb}
+                        size="small"
+                    >
+                        AGB
+                    </Button>
+                )}
                 {legal?.impressum && (
                     <Button
                         color="inherit"

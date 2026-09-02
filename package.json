@@ -1,6 +1,6 @@
 {
     "name": "@site/globals",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "private": true,
     "description": "Geteilte Komponenten, Hooks und Services für alle site-manager-Projekte",
     "main": "./src/index.ts",

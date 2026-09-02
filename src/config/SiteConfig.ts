@@ -43,6 +43,7 @@ export type SiteConfig = {
     legal?: {
         impressum?: string;
         datenschutz?: string;
+        agb?: string;
     };
 
     /** Login/Logout im Footer. Ohne `enabled` bleibt der Bereich leer. */
