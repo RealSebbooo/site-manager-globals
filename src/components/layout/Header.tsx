@@ -91,45 +91,60 @@ export const Header: FC<HeaderProps> = ({
                             ...(linkColor ? { color: linkColor } : {}),
                         }}
                     >
-                        {brand === false ? null : (brand ?? (
-                            <Stack
-                                direction="row"
-                                spacing={1.25}
-                                alignItems="center"
-                                component={Link}
-                                href="/"
-                                aria-label={`${name}, zur Startseite`}
-                                sx={{
-                                    textDecoration: "none",
-                                    color: "inherit",
-                                    minWidth: 0,
-                                }}
-                            >
-                                {logoUrl && (
-                                    <Box
-                                        component="img"
-                                        src={logoUrl}
-                                        alt=""
-                                        sx={{
-                                            height: { xs: 30, md: 38 },
-                                            width: "auto",
-                                            flexShrink: 0,
-                                        }}
-                                    />
-                                )}
-                                <Typography
-                                    variant="h6"
-                                    component="span"
-                                    noWrap
-                                    sx={{
-                                        fontWeight: 700,
-                                        letterSpacing: "-0.01em",
-                                    }}
-                                >
-                                    {name}
-                                </Typography>
-                            </Stack>
-                        ))}
+                        {/* Der Fragment ringsherum ist kein Zierrat. Ein
+                            eigenes `brand` entsteht in der aufrufenden Seite
+                            und ist damit ein Element, das React noch nicht
+                            geprüft hat. Sobald die Toolbar ihre Kinder als
+                            eine Liste weiterreicht, verlangt React dafür
+                            einen Schlüssel und meldet sonst „unique key prop“.
+                            Der Fragment entsteht hier und trägt die Prüfung
+                            selbst, ohne ein weiteres Element im DOM. */}
+                        <React.Fragment key="brand">
+                            {brand === false
+                                ? null
+                                : (brand ?? (
+                                      <Stack
+                                          direction="row"
+                                          spacing={1.25}
+                                          alignItems="center"
+                                          component={Link}
+                                          href="/"
+                                          aria-label={`${name}, zur Startseite`}
+                                          sx={{
+                                              textDecoration: "none",
+                                              color: "inherit",
+                                              minWidth: 0,
+                                          }}
+                                      >
+                                          {logoUrl && (
+                                              <Box
+                                                  component="img"
+                                                  src={logoUrl}
+                                                  alt=""
+                                                  sx={{
+                                                      height: {
+                                                          xs: 30,
+                                                          md: 38,
+                                                      },
+                                                      width: "auto",
+                                                      flexShrink: 0,
+                                                  }}
+                                              />
+                                          )}
+                                          <Typography
+                                              variant="h6"
+                                              component="span"
+                                              noWrap
+                                              sx={{
+                                                  fontWeight: 700,
+                                                  letterSpacing: "-0.01em",
+                                              }}
+                                          >
+                                              {name}
+                                          </Typography>
+                                      </Stack>
+                                  ))}
+                        </React.Fragment>
 
                         <Box
                             component="nav"
@@ -138,8 +153,10 @@ export const Header: FC<HeaderProps> = ({
                                 display: { xs: "none", md: "flex" },
                                 flex: 1,
                                 justifyContent:
-                                    (align ?? (brand === false ? "left" : "center")) ===
-                                    "left"
+                                    (align ??
+                                        (brand === false
+                                            ? "left"
+                                            : "center")) === "left"
                                         ? "flex-start"
                                         : "center",
                                 alignItems: "center",
