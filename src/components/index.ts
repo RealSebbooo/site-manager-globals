@@ -47,6 +47,7 @@ export {
     type ContributionEditorProps,
 } from "./content/ContributionEditor";
 export { PreviewBoxes, type PreviewBoxesProps } from "./content/PreviewBoxes";
+export { Markdown, type MarkdownProps } from "./content/Markdown";
 
 // Kalender
 export {
