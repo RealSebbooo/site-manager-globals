@@ -13,6 +13,7 @@ export {
     visibleNavigation,
 } from "./layout/navigationUtils";
 export { Footer, type FooterProps } from "./layout/Footer";
+export { ErstelltVon, type ErstelltVonProps } from "./layout/ErstelltVon";
 export { PageHead, type PageHeadProps } from "./layout/PageHead";
 export {
     buildMetadata,
