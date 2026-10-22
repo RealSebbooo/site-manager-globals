@@ -14,6 +14,11 @@ export {
 } from "./layout/navigationUtils";
 export { Footer, type FooterProps } from "./layout/Footer";
 export { ErstelltVon, type ErstelltVonProps } from "./layout/ErstelltVon";
+export {
+    InfoBanner,
+    type InfoBannerProps,
+    type InfoBannerTon,
+} from "./layout/InfoBanner";
 export { PageHead, type PageHeadProps } from "./layout/PageHead";
 export {
     buildMetadata,
