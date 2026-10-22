@@ -113,8 +113,11 @@ export const InfoBanner: FC<InfoBannerProps> = ({
                 sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 1.5,
-                    py: 1.25,
+                    gap: 1,
+                    // Bewusst schmal: das Band soll gelesen werden, aber dem
+                    // Kopf der Seite nicht die Schau stehlen.
+                    py: 0.5,
+                    minHeight: 32,
                 }}
             >
                 {icon && (
@@ -129,6 +132,7 @@ export const InfoBanner: FC<InfoBannerProps> = ({
                         flex: 1,
                         m: 0,
                         fontWeight: 500,
+                        lineHeight: 1.4,
                         textAlign: ausrichtung,
                     }}
                 >
@@ -156,7 +160,7 @@ export const InfoBanner: FC<InfoBannerProps> = ({
                         size="small"
                         aria-label="Hinweis schließen"
                         onClick={schliessen}
-                        sx={{ color: "inherit", flexShrink: 0 }}
+                        sx={{ color: "inherit", flexShrink: 0, p: 0.25 }}
                     >
                         <CloseIcon fontSize="small" />
                     </IconButton>
